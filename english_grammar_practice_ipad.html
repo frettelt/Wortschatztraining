@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>English Grammar Practice - IGS Rodenberg</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --text-dark: #1e293b;
+            --text-medium: #475569;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            touch-action: manipulation;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .card {
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-medium);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .exercise-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            border: 3px solid transparent;
+            touch-action: manipulation;
+        }
+
+        .exercise-card.selected {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
+        }
+
+        .exercise-card:active {
+            transform: scale(0.98);
+        }
+
+        .exercise-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: block;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border: 2px solid white;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .exercise-card.selected::before {
+            background: #10b981;
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            border-color: #10b981;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            touch-action: manipulation;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--text-medium);
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:active {
+            background: var(--text-dark);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        /* Exercise Page Styles */
+        .progress-bar {
+            background: var(--bg-light);
+            height: 10px;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            height: 100%;
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .question {
+            background: var(--bg-light);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            background: white;
+            transition: all 0.3s ease;
+            min-width: 130px;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2.5rem;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        select.correct {
+            border-color: var(--secondary);
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        select.incorrect {
+            border-color: var(--error);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .feedback {
+            margin-top: 2rem;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .feedback.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .feedback.partial {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .feedback.error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .student-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .rule-reminder {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+
+        .rule-reminder h3 {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .rule-reminder ul {
+            margin-left: 1.5rem;
+            color: var(--text-medium);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .exercise-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-secondary {
+                margin-left: 0;
+                margin-top: 0.75rem;
+                display: block;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Page -->
+        <div id="startPage" class="card">
+            <h1>🇬🇧 English Grammar Practice</h1>
+            <p class="subtitle">Welcome! Choose your exercises and improve your English skills.</p>
+            
+            <div class="input-group">
+                <label for="studentName">Your Name:</label>
+                <input type="text" id="studentName" placeholder="Enter your name..." required>
+            </div>
+
+            <label style="margin-bottom: 1rem; display: block;">Select Exercises (tap to select):</label>
+            <div class="exercise-grid" id="exerciseGrid">
+                <div class="exercise-card" data-exercise="1">
+                    <span class="exercise-label">TOO vs. TO</span>
+                </div>
+                <div class="exercise-card" data-exercise="2">
+                    <span class="exercise-label">LIVE vs. LIFE</span>
+                </div>
+                <div class="exercise-card" data-exercise="3">
+                    <span class="exercise-label">SAVE vs. SAFE</span>
+                </div>
+                <div class="exercise-card" data-exercise="4">
+                    <span class="exercise-label">EFFECT vs. AFFECT</span>
+                </div>
+                <div class="exercise-card" data-exercise="5">
+                    <span class="exercise-label">WILL/WON'T vs. WANT</span>
+                </div>
+                <div class="exercise-card" data-exercise="6">
+                    <span class="exercise-label">MAKE vs. DO</span>
+                </div>
+                <div class="exercise-card" data-exercise="7">
+                    <span class="exercise-label">WHEN vs. IF</span>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn" id="startBtn">Start Exercises</button>
+            </div>
+        </div>
+
+        <!-- Exercise Page -->
+        <div id="exercisePage" class="hidden">
+            <div class="card">
+                <div class="student-info">
+                    👤 Student: <span id="displayName"></span>
+                </div>
+                
+                <h2 id="exerciseTitle"></h2>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div id="ruleReminder" class="rule-reminder"></div>
+
+                <div id="questionsContainer"></div>
+
+                <div class="btn-container">
+                    <button class="btn" id="checkBtn">Check Answers</button>
+                    <button class="btn btn-secondary" id="backBtn">Back to Start</button>
+                </div>
+
+                <div id="feedbackContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Exercise data
+        const exercises = {
+            1: {
+                title: "TOO vs. TO",
+                rule: `
+                    <h3>Rule Reminder:</h3>
+                    <ul>
+                        <li><strong>too</strong> = auch / zu (viel)</li>
+                        <li><strong>to</strong> = zu (Richtung) / Teil des Infinitivs</li>
+                    </ul>
+                `,
+                questions: [
+                    { text: "I want ___ go ___ the cinema tonight.", answers: ["to", "to"], options: ["to", "too"] },
+                    { text: "This task is ___ difficult ___ complete in one lesson.", answers: ["too", "to"], options: ["to", "too"] },
+                    { text: "She loves pizza, and I do, ___.", answers: ["too"], options: ["to", "too"] },
+                    { text: "Are you coming ___ the party, ___?", answers: ["to", "too"], options: ["to", "too"] },
+                    { text: "It's never ___ late ___ learn something new.", answers: ["too", "to"], options: ["to", "too"] },
+                    { text: "The coffee is ___ hot ___ drink right now.", answers: ["too", "to"], options: ["to", "too"] },
+                    { text: "He went ___ London ___ visit his cousin.", answers: ["to", "to"], options: ["to", "too"] },
+                    { text: "This backpack is ___ heavy ___ carry all day.", answers: ["too", "to"], options: ["to", "too"] },
+                    { text: "We need ___ talk ___ our teacher about the deadline.", answers: ["to", "to"], options: ["to", "too"] },
+                    { text: "The music is ___ loud ___ concentrate.", answers: ["too", "to"], options: ["to", "too"] }
+                ]
+            },
+            2: {
+                title: "LIVE vs. LIFE",
+                rule: `
+                    <h3>Rule Reminder:</h3>
+                    <ul>
+                        <li><strong>live</strong> /lɪv/ = leben (Verb)</li>
+                        <li><strong>life</strong> /laɪf/ = das Leben (Nomen)</li>
+                    </ul>
+                `,
+                questions: [
+                    { text: "Where do you ___?", answers: ["live"], options: ["live", "life"] },
+                    { text: "I ___ in a small town near Hanover.", answers: ["live"], options: ["live", "life"] },
+                    { text: "___ is full of surprises.", answers: ["Life"], options: ["Live", "Life"] },
+                    { text: "My grandparents ___ in Spain now.", answers: ["live"], options: ["live", "life"] },
+                    { text: "Social media plays a big role in our daily ___.", answers: ["life"], options: ["live", "life"] },
+                    { text: "How long have you ___ here?", answers: ["live"], options: ["live", "life"] },
+                    { text: "She wants to ___ a healthy ___.", answers: ["live", "life"], options: ["live", "life"] },
+                    { text: "Real ___ is more important than online ___.", answers: ["life", "life"], options: ["live", "life"] },
+                    { text: "Many young people ___ with their parents.", answers: ["live"], options: ["live", "life"] },
+                    { text: "The quality of ___ in cities can be very different.", answers: ["life"], options: ["live", "life"] }
+                ]
+            },
+            3: {
+                title: "SAVE vs. SAFE",
+                rule: `
+                    <h3>Rule Reminder:</h3>
+                    <ul>
+                        <li><strong>save</strong> = retten / sparen (Verb)</li>
+                        <li><strong>safe</strong> = sicher (Adjektiv)</li>
+                    </ul>
+                `,
+                questions: [
+                    { text: "We need to ___ the environment.", answers: ["save"], options: ["save", "safe"] },
+                    { text: "Is it ___ to walk home alone at night?", answers: ["safe"], options: ["save", "safe"] },
+                    { text: "I try to ___ money for a new phone.", answers: ["save"], options: ["save", "safe"] },
+                    { text: "Always wear a helmet to stay ___.", answers: ["safe"], options: ["save", "safe"] },
+                    { text: "The firefighters managed to ___ everyone.", answers: ["save"], options: ["save", "safe"] },
+                    { text: "Don't forget to ___ your document!", answers: ["save"], options: ["save", "safe"] },
+                    { text: "This neighborhood is very ___.", answers: ["safe"], options: ["save", "safe"] },
+                    { text: "Recycling helps ___ natural resources.", answers: ["save"], options: ["save", "safe"] },
+                    { text: "Keep your password ___ and don't share it.", answers: ["safe"], options: ["save", "safe"] },
+                    { text: "Solar energy can help us ___ the planet.", answers: ["save"], options: ["save", "safe"] }
+                ]
+            },
+            4: {
+                title: "EFFECT vs. AFFECT",
+                rule: `
+                    <h3>Rule Reminder:</h3>
+                    <ul>
+                        <li><strong>affect</strong> = beeinflussen (Verb)</li>
+                        <li><strong>effect</strong> = Auswirkung, Effekt (Nomen)</li>
+                    </ul>
+                `,
+                questions: [
+                    { text: "Climate change will ___ future generations.", answers: ["affect"], options: ["affect", "effect"] },
+                    { text: "Social media has a huge ___ on teenagers.", answers: ["effect"], options: ["affect", "effect"] },
+                    { text: "How does stress ___ your health?", answers: ["affect"], options: ["affect", "effect"] },
+                    { text: "The new law had an immediate ___.", answers: ["effect"], options: ["affect", "effect"] },
+                    { text: "Lack of sleep can ___ your concentration.", answers: ["affect"], options: ["affect", "effect"] },
+                    { text: "What are the long-term ___ of fast fashion?", answers: ["effects"], options: ["affects", "effects"] },
+                    { text: "Music can ___ our mood in positive ways.", answers: ["affect"], options: ["affect", "effect"] },
+                    { text: "The special ___ in the movie were amazing.", answers: ["effects"], options: ["affects", "effects"] },
+                    { text: "Does screen time ___ your sleep quality?", answers: ["affect"], options: ["affect", "effect"] },
+                    { text: "One person can have a powerful ___ on others.", answers: ["effect"], options: ["affect", "effect"] }
+                ]
+            },
+            5: {
+                title: "WILL/WON'T vs. WANT",
+                rule: `
+                    <h3>Rule Reminder:</h3>
+                    <ul>
+                        <li><strong>will / won't</strong> = werden / werden nicht (Futur)</li>
+                        <li><strong>want / don't want</strong> = wollen / nicht wollen</li>
+                    </ul>
+                `,
+                questions: [
+                    { text: "I ___ to go to university after school.", answers: ["want"], options: ["will", "want"] },
+                    { text: "She ___ to miss the concert.", answers: ["doesn't want"], options: ["won't", "doesn't want"] },
+                    { text: "___ you help me with this?", answers: ["Will"], options: ["Will", "Want"] },
+                    { text: "They ___ to travel around Europe next summer.", answers: ["want"], options: ["will", "want"] },
+                    { text: "The train ___ arrive until 6 pm.", answers: ["won't"], options: ["won't", "doesn't want"] },
+                    { text: "Do you ___ to come with us?", answers: ["want"], options: ["will", "want"] },
+                    { text: "He ___ probably be late again.", answers: ["will"], options: ["will", "wants"] },
+                    { text: "I ___ to eat meat anymore.", answers: ["don't want"], options: ["won't", "don't want"] },
+                    { text: "The weather forecast says it ___ rain tomorrow.", answers: ["will"], options: ["will", "wants"] },
+                    { text: "My parents ___ me to stay out late.", answers: ["don't want"], options: ["won't", "don't want"] }
+                ]
+            },
+            6: {
+                title: "MAKE vs. DO",
+                rule: `
+                    <h3>Rule Reminder:</h3>
+                    <ul>
+                        <li><strong>make</strong> = machen (herstellen, kreieren)</li>
+                        <li><strong>do</strong> = machen (durchführen, erledigen)</li>
+                    </ul>
+                `,
+                questions: [
+                    { text: "I need to ___ my homework before dinner.", answers: ["do"], options: ["make", "do"] },
+                    { text: "Can you help me ___ a poster?", answers: ["make"], options: ["make", "do"] },
+                    { text: "Let's ___ something fun this weekend!", answers: ["do"], options: ["make", "do"] },
+                    { text: "She always ___ her best in exams.", answers: ["does"], options: ["makes", "does"] },
+                    { text: "Did you ___ any mistakes in the test?", answers: ["make"], options: ["make", "do"] },
+                    { text: "We should ___ more exercise.", answers: ["do"], options: ["make", "do"] },
+                    { text: "He wants to ___ a good impression.", answers: ["make"], options: ["make", "do"] },
+                    { text: "Don't forget to ___ the washing up!", answers: ["do"], options: ["make", "do"] },
+                    { text: "I'll ___ you a sandwich if you're hungry.", answers: ["make"], options: ["make", "do"] },
+                    { text: "Have you ___ a decision yet?", answers: ["made"], options: ["made", "done"] }
+                ]
+            },
+            7: {
+                title: "WHEN vs. IF",
+                rule: `
+                    <h3>Rule Reminder:</h3>
+                    <ul>
+                        <li><strong>when</strong> = wann / wenn (bei Sicherheit)</li>
+                        <li><strong>if</strong> = wenn / falls (bei Unsicherheit/Bedingung)</li>
+                    </ul>
+                `,
+                questions: [
+                    { text: "___ I finish school, I want to take a gap year.", answers: ["When"], options: ["When", "If"] },
+                    { text: "I'll call you ___ I have time.", answers: ["when"], options: ["when", "if"] },
+                    { text: "___ it rains tomorrow, we'll stay inside.", answers: ["If"], options: ["When", "If"] },
+                    { text: "___ do you want to meet?", answers: ["When"], options: ["When", "If"] },
+                    { text: "I don't know ___ he will come to the party.", answers: ["if"], options: ["when", "if"] },
+                    { text: "___ you heat ice, it melts.", answers: ["When"], options: ["When", "If"] },
+                    { text: "___ I become famous, I'll remember you!", answers: ["If"], options: ["When", "If"] },
+                    { text: "Tell me ___ you're ready to leave.", answers: ["when"], options: ["when", "if"] },
+                    { text: "___ I'm not sure about something, I ask questions.", answers: ["If"], options: ["When", "If"] },
+                    { text: "___ will the results be published?", answers: ["When"], options: ["When", "If"] }
+                ]
+            }
+        };
+
+        let currentExercises = [];
+        let currentExerciseIndex = 0;
+        let studentName = "";
+        let selectedExercises = new Set();
+
+        // Setup exercise card selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const exerciseCards = document.querySelectorAll('.exercise-card');
+            
+            exerciseCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const exerciseId = this.getAttribute('data-exercise');
+                    
+                    if (selectedExercises.has(exerciseId)) {
+                        selectedExercises.delete(exerciseId);
+                        this.classList.remove('selected');
+                    } else {
+                        selectedExercises.add(exerciseId);
+                        this.classList.add('selected');
+                    }
+                });
+            });
+
+            document.getElementById('startBtn').addEventListener('click', startExercises);
+            document.getElementById('checkBtn').addEventListener('click', checkAnswers);
+            document.getElementById('backBtn').addEventListener('click', goBack);
+        });
+
+        function startExercises() {
+            studentName = document.getElementById('studentName').value.trim();
+            
+            if (!studentName) {
+                alert('Please enter your name!');
+                return;
+            }
+
+            if (selectedExercises.size === 0) {
+                alert('Please select at least one exercise!');
+                return;
+            }
+
+            currentExercises = Array.from(selectedExercises);
+            currentExerciseIndex = 0;
+
+            document.getElementById('startPage').classList.add('hidden');
+            document.getElementById('exercisePage').classList.remove('hidden');
+            
+            loadExercise();
+        }
+
+        function loadExercise() {
+            const exerciseId = currentExercises[currentExerciseIndex];
+            const exercise = exercises[exerciseId];
+            
+            document.getElementById('displayName').textContent = studentName;
+            document.getElementById('exerciseTitle').textContent = exercise.title;
+            document.getElementById('ruleReminder').innerHTML = exercise.rule;
+            
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            exercise.questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                
+                let questionHTML = `<div class="question-number">Question ${index + 1}</div>`;
+                let textParts = q.text.split('___');
+                
+                questionHTML += '<div class="question-text">';
+                textParts.forEach((part, i) => {
+                    questionHTML += part;
+                    if (i < textParts.length - 1) {
+                        const selectId = `q${index}_blank${i}`;
+                        questionHTML += `<select id="${selectId}" class="answer-select">
+                            <option value="">---</option>`;
+                        
+                        q.options.forEach(option => {
+                            questionHTML += `<option value="${option}">${option}</option>`;
+                        });
+                        
+                        questionHTML += `</select>`;
+                    }
+                });
+                questionHTML += '</div>';
+                
+                questionDiv.innerHTML = questionHTML;
+                container.appendChild(questionDiv);
+            });
+
+            updateProgress();
+            document.getElementById('feedbackContainer').innerHTML = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress() {
+            const progress = ((currentExerciseIndex) / currentExercises.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function checkAnswers() {
+            const exerciseId = currentExercises[currentExerciseIndex];
+            const exercise = exercises[exerciseId];
+            
+            let correct = 0;
+            let total = 0;
+
+            exercise.questions.forEach((q, qIndex) => {
+                q.answers.forEach((correctAnswer, blankIndex) => {
+                    total++;
+                    const select = document.getElementById(`q${qIndex}_blank${blankIndex}`);
+                    const userAnswer = select.value;
+                    
+                    if (userAnswer === correctAnswer) {
+                        correct++;
+                        select.classList.remove('incorrect');
+                        select.classList.add('correct');
+                    } else {
+                        select.classList.remove('correct');
+                        select.classList.add('incorrect');
+                    }
+                });
+            });
+
+            const percentage = Math.round((correct / total) * 100);
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            
+            let feedbackClass = 'error';
+            let feedbackText = 'Keep practicing! ';
+            let emoji = '💪';
+            
+            if (percentage === 100) {
+                feedbackClass = 'success';
+                feedbackText = 'Perfect! Well done, ' + studentName + '! ';
+                emoji = '🎉';
+            } else if (percentage >= 70) {
+                feedbackClass = 'partial';
+                feedbackText = 'Good job, ' + studentName + '! ';
+                emoji = '👍';
+            }
+
+            feedbackContainer.innerHTML = `
+                <div class="feedback ${feedbackClass}">
+                    <div>${emoji}</div>
+                    <div class="score">${correct} / ${total}</div>
+                    <div>${feedbackText}You got ${percentage}% correct!</div>
+                    ${currentExerciseIndex < currentExercises.length - 1 ? 
+                        '<button class="btn" style="margin-top: 1rem;" onclick="nextExercise()">Next Exercise →</button>' : 
+                        '<button class="btn" style="margin-top: 1rem;" onclick="finish()">Finish</button>'}
+                </div>
+            `;
+
+            feedbackContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function nextExercise() {
+            currentExerciseIndex++;
+            if (currentExerciseIndex < currentExercises.length) {
+                loadExercise();
+            } else {
+                finish();
+            }
+        }
+
+        function finish() {
+            document.getElementById('feedbackContainer').innerHTML = `
+                <div class="feedback success">
+                    <div>🎊</div>
+                    <div style="font-size: 1.75rem; margin: 1rem 0;">Congratulations, ${studentName}!</div>
+                    <div>You've completed all selected exercises!</div>
+                    <button class="btn" style="margin-top: 1rem;" onclick="goBack()">Start New Session</button>
+                </div>
+            `;
+        }
+
+        function goBack() {
+            document.getElementById('exercisePage').classList.add('hidden');
+            document.getElementById('startPage').classList.remove('hidden');
+            
+            // Reset selections
+            selectedExercises.clear();
+            document.querySelectorAll('.exercise-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById('studentName').value = '';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

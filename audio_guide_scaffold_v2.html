@@ -1,0 +1,324 @@
+
+<style>
+  .sb-wrap { font-family: var(--font-sans); padding: 1rem 0; }
+  .section-heading { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 12px; margin-top: 0; border-left: 3px solid #5DCAA5; padding-left: 10px; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+  .tab-bar { display: flex; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .tab { font-size: 13px; padding: 5px 14px; border-radius: 20px; border: 0.5px solid var(--color-border-tertiary); cursor: pointer; background: var(--color-background-primary); color: var(--color-text-secondary); }
+  .tab.active { background: #1D9E75; border-color: #1D9E75; color: #fff; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .chip { display: inline-block; font-size: 14px; color: var(--color-text-primary); background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 20px; padding: 5px 12px; cursor: pointer; transition: background 0.15s, border-color 0.15s; white-space: nowrap; user-select: none; }
+  .chip:hover { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  .chip.selected { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+  .sb-section { display: flex; gap: 0; align-items: stretch; margin-bottom: 2rem; }
+  .sb-col { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .sb-col-label { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 4px; font-weight: 500; }
+  .connector { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 10px; }
+  .connector-line { flex: 1; width: 1px; background: var(--color-border-tertiary); }
+  .connector-plus { font-size: 18px; color: #5DCAA5; line-height: 1; padding: 4px 0; }
+  .preview-box { background: #E1F5EE; border: 0.5px solid #5DCAA5; border-radius: var(--border-radius-lg); padding: 12px 16px; min-height: 52px; margin-top: 0.5rem; font-size: 15px; color: #085041; line-height: 1.6; }
+  .preview-placeholder { color: #1D9E75; font-style: italic; font-size: 14px; }
+  .reset-btn { font-size: 13px; color: var(--color-text-secondary); background: none; border: 0.5px solid var(--color-border-tertiary); border-radius: 20px; padding: 4px 12px; cursor: pointer; margin-top: 8px; }
+  .reset-btn:hover { background: var(--color-background-secondary); }
+
+  /* Flip cards */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+  .flip-card { height: 80px; cursor: pointer; perspective: 600px; }
+  .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.45s; transform-style: preserve-3d; }
+  .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-front, .flip-back { position: absolute; inset: 0; border-radius: var(--border-radius-md); backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; text-align: center; border: 0.5px solid var(--color-border-tertiary); }
+  .flip-front { background: var(--color-background-primary); }
+  .flip-back { background: #E1F5EE; border-color: #5DCAA5; transform: rotateY(180deg); }
+  .flip-front .de { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .flip-front .hint { font-size: 11px; color: var(--color-text-secondary); margin-top: 3px; }
+  .flip-back .en { font-size: 13px; font-weight: 500; color: #085041; }
+  .flip-back .example { font-size: 11px; color: #1D9E75; margin-top: 3px; font-style: italic; }
+  .flip-note { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 10px; }
+
+  /* Sentence exercise */
+  .ex-item { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px 14px; margin-bottom: 10px; }
+  .ex-sentence { font-size: 14px; color: var(--color-text-primary); line-height: 1.7; margin-bottom: 8px; }
+  .gap-input { border: none; border-bottom: 1.5px solid #5DCAA5; background: transparent; font-size: 14px; color: var(--color-text-primary); padding: 0 4px; width: 140px; outline: none; font-family: var(--font-sans); }
+  .gap-input.correct { border-bottom-color: #1D9E75; background: #E1F5EE; border-radius: 3px; color: #085041; }
+  .gap-input.wrong { border-bottom-color: #E24B4A; background: #FCEBEB; border-radius: 3px; color: #501313; }
+  .ex-check { font-size: 12px; padding: 3px 10px; border-radius: 12px; border: 0.5px solid var(--color-border-tertiary); background: none; cursor: pointer; color: var(--color-text-secondary); }
+  .ex-check:hover { background: var(--color-background-secondary); }
+  .ex-feedback { font-size: 12px; margin-top: 4px; min-height: 16px; }
+  .ex-feedback.ok { color: #1D9E75; }
+  .ex-feedback.no { color: #A32D2D; }
+  .check-all-btn { font-size: 13px; padding: 6px 18px; border-radius: 20px; border: 0.5px solid #5DCAA5; background: #E1F5EE; color: #085041; cursor: pointer; margin-top: 4px; }
+  .check-all-btn:hover { background: #9FE1CB; }
+  .score-box { font-size: 14px; font-weight: 500; color: #085041; margin-top: 10px; min-height: 20px; }
+
+  .tip-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-left: 3px solid #5DCAA5; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 14px; color: var(--color-text-primary); margin-bottom: 8px; }
+</style>
+
+<div class="sb-wrap">
+  <h2 class="sr-only">Scaffold – Audio Guide Lernaufgabe Klasse 6</h2>
+
+  <div class="tab-bar">
+    <div class="tab active" onclick="switchTab('switchboard')">Switchboard</div>
+    <div class="tab" onclick="switchTab('vocab')">Vokabeln</div>
+    <div class="tab" onclick="switchTab('exercise')">Übung</div>
+    <div class="tab" onclick="switchTab('tips')">Study Tips</div>
+  </div>
+
+  <!-- SWITCHBOARD -->
+  <div id="panel-switchboard" class="tab-panel active">
+    <p class="section-heading">Step 2 & 3 — Redemittel</p>
+    <div class="sb-section">
+      <div class="sb-col" style="min-width:140px;max-width:160px;">
+        <div class="sb-col-label">Opener</div>
+        <span class="chip" onclick="pick('open',this,'Hello and welcome to')">Hello and welcome to</span>
+        <span class="chip" onclick="pick('open',this,'Hi! Today we are at')">Hi! Today we are at</span>
+        <span class="chip" onclick="pick('open',this,'Welcome to')">Welcome to</span>
+        <span class="chip" onclick="pick('open',this,'My name is … and we are at')">My name is … and we are at</span>
+      </div>
+      <div class="connector"><div class="connector-line"></div><div class="connector-plus">+</div><div class="connector-line"></div></div>
+      <div class="sb-col" style="flex:1;">
+        <div class="sb-col-label">Place / Name</div>
+        <span class="chip" onclick="pick('place',this,'the … zoo')">the … zoo</span>
+        <span class="chip" onclick="pick('place',this,'the … park')">the … park</span>
+        <span class="chip" onclick="pick('place',this,'the … castle')">the … castle</span>
+        <span class="chip" onclick="pick('place',this,'the … museum')">the … museum</span>
+        <span class="chip" onclick="pick('place',this,'the … market')">the … market</span>
+        <span class="chip" onclick="pick('place',this,'the … church')">the … church</span>
+        <span class="chip" onclick="pick('place',this,'[your place]')">[your place]</span>
+      </div>
+      <div class="connector"><div class="connector-line"></div><div class="connector-plus">+</div><div class="connector-line"></div></div>
+      <div class="sb-col" style="flex:1;">
+        <div class="sb-col-label">Key fact</div>
+        <span class="chip" onclick="pick('fact',this,'It is in [town], Germany.')">It is in [town], Germany.</span>
+        <span class="chip" onclick="pick('fact',this,'It is the biggest / oldest … in …')">It is the biggest / oldest …</span>
+        <span class="chip" onclick="pick('fact',this,'There are … animals / things here.')">There are … animals / things here.</span>
+        <span class="chip" onclick="pick('fact',this,'It is very famous.')">It is very famous.</span>
+        <span class="chip" onclick="pick('fact',this,'It is a very old building.')">It is a very old building.</span>
+        <span class="chip" onclick="pick('fact',this,'Every year … people visit.')">Every year … people visit.</span>
+      </div>
+    </div>
+    <div id="preview1" class="preview-box"><span class="preview-placeholder">Dein Satz erscheint hier …</span></div>
+    <button class="reset-btn" onclick="resetSection(['open','place','fact'],'preview1')">Zurücksetzen</button>
+
+    <hr class="divider">
+    <p class="section-heading">Was kann man dort machen / sehen?</p>
+    <div class="sb-section">
+      <div class="sb-col" style="min-width:130px;">
+        <div class="sb-col-label">You can …</div>
+        <span class="chip" onclick="pick('can',this,'You can see')">You can see</span>
+        <span class="chip" onclick="pick('can',this,'You can watch')">You can watch</span>
+        <span class="chip" onclick="pick('can',this,'You can buy')">You can buy</span>
+        <span class="chip" onclick="pick('can',this,'You can ride')">You can ride</span>
+        <span class="chip" onclick="pick('can',this,'Have you ever seen')">Have you ever seen</span>
+        <span class="chip" onclick="pick('can',this,'Don\'t miss')">Don't miss</span>
+      </div>
+      <div class="connector"><div class="connector-line"></div><div class="connector-plus">+</div><div class="connector-line"></div></div>
+      <div class="sb-col" style="flex:1;">
+        <div class="sb-col-label">… what?</div>
+        <span class="chip" onclick="pick('what',this,'lots of animals')">lots of animals</span>
+        <span class="chip" onclick="pick('what',this,'the feeding of the …')">the feeding of the …</span>
+        <span class="chip" onclick="pick('what',this,'a football match')">a football match</span>
+        <span class="chip" onclick="pick('what',this,'lots of interesting things')">lots of interesting things</span>
+        <span class="chip" onclick="pick('what',this,'a baby animal')">a baby animal</span>
+        <span class="chip" onclick="pick('what',this,'great food and drinks')">great food and drinks</span>
+        <span class="chip" onclick="pick('what',this,'[your idea]')">[your idea]</span>
+      </div>
+      <div class="connector"><div class="connector-line"></div><div class="connector-plus">+</div><div class="connector-line"></div></div>
+      <div class="sb-col" style="flex:1;">
+        <div class="sb-col-label">… when?</div>
+        <span class="chip" onclick="pick('when',this,'')">— (kein Zusatz)</span>
+        <span class="chip" onclick="pick('when',this,'every day')">every day</span>
+        <span class="chip" onclick="pick('when',this,'at … o\'clock')">at … o'clock</span>
+        <span class="chip" onclick="pick('when',this,'in the morning / afternoon')">in the morning / afternoon</span>
+        <span class="chip" onclick="pick('when',this,'at the … station')">at the … station</span>
+      </div>
+    </div>
+    <div id="preview2" class="preview-box"><span class="preview-placeholder">Dein Satz erscheint hier …</span></div>
+    <button class="reset-btn" onclick="resetSection(['can','what','when'],'preview2')">Zurücksetzen</button>
+
+    <hr class="divider">
+    <p class="section-heading">Outro / Abschluss</p>
+    <div class="sb-section">
+      <div class="sb-col" style="flex:1;">
+        <div class="sb-col-label">Empfehlung</div>
+        <span class="chip" onclick="pick('outro',this,'We think … is really great!')">We think … is really great!</span>
+        <span class="chip" onclick="pick('outro',this,'I would take a visitor here because it\'s fun.')">I would take a visitor here …</span>
+        <span class="chip" onclick="pick('outro',this,'Don\'t forget to check the times!')">Don't forget to check the times!</span>
+        <span class="chip" onclick="pick('outro',this,'We hope you enjoy your visit!')">We hope you enjoy your visit!</span>
+        <span class="chip" onclick="pick('outro',this,'Thank you for listening!')">Thank you for listening!</span>
+      </div>
+      <div class="connector"><div class="connector-line"></div><div class="connector-plus">+</div><div class="connector-line"></div></div>
+      <div class="sb-col" style="flex:1;">
+        <div class="sb-col-label">Frage ans Publikum</div>
+        <span class="chip" onclick="pick('question',this,'')">— (kein Zusatz)</span>
+        <span class="chip" onclick="pick('question',this,'Did you understand everything?')">Did you understand everything?</span>
+        <span class="chip" onclick="pick('question',this,'Would you like to visit?')">Would you like to visit?</span>
+        <span class="chip" onclick="pick('question',this,'Check the website for more info!')">Check the website!</span>
+      </div>
+    </div>
+    <div id="preview3" class="preview-box"><span class="preview-placeholder">Dein Satz erscheint hier …</span></div>
+    <button class="reset-btn" onclick="resetSection(['outro','question'],'preview3')">Zurücksetzen</button>
+  </div>
+
+  <!-- VOCAB -->
+  <div id="panel-vocab" class="tab-panel">
+    <p class="section-heading">Key vocabulary — 25 words</p>
+    <p class="flip-note">Klicke auf eine Karte, um sie umzudrehen.</p>
+    <div class="vocab-grid" id="vocab-grid"></div>
+  </div>
+
+  <!-- EXERCISE -->
+  <div id="panel-exercise" class="tab-panel">
+    <p class="section-heading">Fill in the gaps</p>
+    <p style="font-size:13px; color:var(--color-text-secondary); margin-bottom:14px;">Use the words from the box. Write one word in each gap.</p>
+    <div style="background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px 14px; font-size:13px; color:var(--color-text-secondary); margin-bottom:16px; line-height:1.9;">
+      <strong style="font-weight:500; color:var(--color-text-primary);">Word box:</strong> &nbsp;
+      <em>visitor · famous · building · record · interesting · feeding · around the world · sunbathe · check · audio guide · town hall · recommend · entrance fee · opening hours · guided tour</em>
+    </div>
+    <div id="exercises"></div>
+    <button class="check-all-btn" onclick="checkAll()">Check all answers</button>
+    <div class="score-box" id="score-box"></div>
+  </div>
+
+  <!-- TIPS -->
+  <div id="panel-tips" class="tab-panel">
+    <p class="section-heading">Tips for your audio guide</p>
+    <div class="tip-card"><strong style="font-weight:500;">Short sentences!</strong> The listener cannot read — only listen. Keep it simple.</div>
+    <div class="tip-card"><strong style="font-weight:500;">Talk to the listener.</strong> Use "you" and questions like "Have you ever …?"</div>
+    <div class="tip-card"><strong style="font-weight:500;">Not too fast!</strong> Practise reading aloud before you record.</div>
+    <div class="tip-card"><strong style="font-weight:500;">Check your pronunciation</strong> in a dictionary or online if you are not sure.</div>
+    <div class="tip-card"><strong style="font-weight:500;">Each person</strong> in your group should say at least one sentence.</div>
+    <div class="tip-card"><strong style="font-weight:500;">Start and end</strong> your audio guide — welcome the listener and say goodbye!</div>
+  </div>
+</div>
+
+<script>
+const vocabData = [
+  { de: "der Audioguide", en: "audio guide", ex: "We made an audio guide." },
+  { de: "interessant", en: "interesting", ex: "This place is very interesting." },
+  { de: "berühmt", en: "famous", ex: "The castle is famous." },
+  { de: "der Besucher / die Besucherin", en: "visitor", ex: "Many visitors come here." },
+  { de: "besuchen", en: "to visit", ex: "You can visit the museum." },
+  { de: "das Gebäude", en: "building", ex: "It's a very old building." },
+  { de: "das größte / älteste", en: "the biggest / oldest", ex: "It's the biggest zoo in Germany." },
+  { de: "aus aller Welt", en: "around the world", ex: "Animals from around the world." },
+  { de: "aufnehmen", en: "to record", ex: "We record our texts." },
+  { de: "nachschauen", en: "to check", ex: "Check the times online!" },
+  { de: "die Fütterung", en: "(animal) feeding", ex: "The feeding is at 3 o'clock." },
+  { de: "Ich würde … mitnehmen zu", en: "I would take … to", ex: "I would take a visitor to the park." },
+  { de: "sonnenbaden", en: "to sunbathe", ex: "You can sunbathe in the park." },
+  { de: "Fußball schauen", en: "to watch football", ex: "You can watch football here." },
+  { de: "die Öffnungszeiten", en: "opening hours", ex: "Check the opening hours." },
+  { de: "der Eintritt / die Eintrittsgebühr", en: "entrance fee", ex: "The entrance fee is free for kids." },
+  { de: "empfehlen", en: "to recommend", ex: "We recommend this place!" },
+  { de: "die Führung", en: "guided tour", ex: "Join our guided tour!" },
+  { de: "das Rathaus", en: "town hall", ex: "Visit the old town hall." },
+  { de: "die Brücke", en: "bridge", ex: "The bridge is 200 years old." },
+  { de: "der Markt", en: "market", ex: "You can buy things at the market." },
+  { de: "kaufen", en: "to buy", ex: "You can buy souvenirs here." },
+  { de: "die Ausstellung", en: "exhibition", ex: "There is a great exhibition." },
+  { de: "spannend", en: "exciting", ex: "It's really exciting!" },
+  { de: "nicht verpassen!", en: "don't miss!", ex: "Don't miss the feeding!" },
+];
+
+const exercises = [
+  { sentence: "Welcome to our ___! We made it for our school project.", answer: "audio guide", hint: "Audioguide" },
+  { sentence: "The Wilhelma zoo is very ___. There are animals from ___ the world.", answer: "interesting|around", hint: "interessant / aus aller", multi: true },
+  { sentence: "You can see the ___ of the crocodiles every day at 2 o'clock.", answer: "feeding", hint: "Fütterung" },
+  { sentence: "The castle is very ___. Lots of people come to visit it.", answer: "famous", hint: "berühmt" },
+  { sentence: "Please ___ the opening hours on our website before you come.", answer: "check", hint: "nachschauen" },
+  { sentence: "We ___ our texts with a phone. Listen to our ___!", answer: "record|audio guide", hint: "aufnehmen / Audioguide", multi: true },
+  { sentence: "The ___ is free for children under 6.", answer: "entrance fee", hint: "Eintrittsgebühr" },
+  { sentence: "It is a very old ___ — it was built in 1450.", answer: "building", hint: "Gebäude" },
+  { sentence: "Every ___ can join the ___ at 11 o'clock.", answer: "visitor|guided tour", hint: "Besucher / Führung", multi: true },
+  { sentence: "In the summer, you can ___ in the park. It's great!", answer: "sunbathe", hint: "sonnenbaden" },
+];
+
+function buildVocab() {
+  const grid = document.getElementById('vocab-grid');
+  vocabData.forEach((v, i) => {
+    const card = document.createElement('div');
+    card.className = 'flip-card';
+    card.innerHTML = `<div class="flip-inner">
+      <div class="flip-front"><div class="de">${v.de}</div><div class="hint">tap to flip</div></div>
+      <div class="flip-back"><div class="en">${v.en}</div><div class="example">${v.ex}</div></div>
+    </div>`;
+    card.addEventListener('click', () => card.classList.toggle('flipped'));
+    grid.appendChild(card);
+  });
+}
+
+function buildExercises() {
+  const container = document.getElementById('exercises');
+  exercises.forEach((ex, i) => {
+    const answers = ex.answer.split('|');
+    let sentenceHtml = ex.sentence;
+    answers.forEach((ans, ai) => {
+      sentenceHtml = sentenceHtml.replace('___', `<input class="gap-input" id="ex${i}_${ai}" type="text" autocomplete="off" placeholder="${ex.hint ? ex.hint.split('/')[ai] || '' : ''}" />`);
+    });
+    const div = document.createElement('div');
+    div.className = 'ex-item';
+    div.innerHTML = `<div class="ex-sentence">${sentenceHtml}</div><div class="ex-feedback" id="fb${i}"></div>`;
+    container.appendChild(div);
+  });
+}
+
+function checkAll() {
+  let correct = 0;
+  exercises.forEach((ex, i) => {
+    const answers = ex.answer.split('|');
+    let allOk = true;
+    answers.forEach((ans, ai) => {
+      const input = document.getElementById(`ex${i}_${ai}`);
+      if (!input) return;
+      const val = input.value.trim().toLowerCase();
+      const ok = val === ans.toLowerCase();
+      input.classList.remove('correct','wrong');
+      input.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) allOk = false;
+    });
+    const fb = document.getElementById(`fb${i}`);
+    fb.className = 'ex-feedback ' + (allOk ? 'ok' : 'no');
+    fb.textContent = allOk ? 'Correct!' : 'Try again. (' + ex.answer.replace('|', ' / ') + ')';
+    if (allOk) correct++;
+  });
+  const score = document.getElementById('score-box');
+  score.textContent = `Result: ${correct} / ${exercises.length} correct`;
+}
+
+const sbState = {};
+function pick(slot, el, val) {
+  document.querySelectorAll(`.chip[data-slot="${slot}"]`).forEach(c => { c.classList.remove('selected'); c.removeAttribute('data-slot'); });
+  el.setAttribute('data-slot', slot);
+  el.classList.add('selected');
+  sbState[slot] = val;
+  updatePreviews();
+}
+function updatePreviews() {
+  upd('preview1', ['open','place','fact']);
+  upd('preview2', ['can','what','when']);
+  upd('preview3', ['outro','question']);
+}
+function upd(id, slots) {
+  const box = document.getElementById(id);
+  const parts = slots.map(s => sbState[s]).filter(v => v !== undefined && v !== '');
+  box.innerHTML = parts.length === 0 ? '<span class="preview-placeholder">Dein Satz erscheint hier …</span>' : parts.join(' ');
+}
+function resetSection(slots, previewId) {
+  slots.forEach(s => {
+    delete sbState[s];
+    document.querySelectorAll(`.chip[data-slot="${s}"]`).forEach(c => { c.classList.remove('selected'); c.removeAttribute('data-slot'); });
+  });
+  upd(previewId, slots);
+  document.getElementById(previewId).innerHTML = '<span class="preview-placeholder">Dein Satz erscheint hier …</span>';
+}
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.tab[onclick="switchTab('${name}')"]`).classList.add('active');
+  document.getElementById(`panel-${name}`).classList.add('active');
+}
+
+buildVocab();
+buildExercises();
+</script>
